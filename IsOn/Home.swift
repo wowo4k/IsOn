@@ -30,7 +30,7 @@ struct Home: View {
             }
             else {
                 HStack {
-                    Text("About")
+                    Text("About!")
 
                 }
             }
