@@ -20,7 +20,7 @@ struct ContentView: View {
         VStack () {
             Text("IsOn!!")
         }.onAppear {
-            self.instantiateTimer()
+            //self.instantiateTimer()
         }.onDisappear {
             self.cancelTimer()
         }.onReceive(timer) { _ in

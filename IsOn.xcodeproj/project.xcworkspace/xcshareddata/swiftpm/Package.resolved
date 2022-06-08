@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "cocoaasyncsocket",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/robbiehanson/CocoaAsyncSocket.git",
+      "state" : {
+        "revision" : "dbdc00669c1ced63b27c3c5f052ee4d28f10150c",
+        "version" : "7.6.5"
+      }
+    },
+    {
+      "identity" : "embassy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/envoy/Embassy.git",
+      "state" : {
+        "revision" : "065b6ce52596bd06b867cfe17fea2c56dcb53b30",
+        "version" : "4.1.3"
+      }
+    },
+    {
+      "identity" : "httpparserc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Building42/HTTPParserC.git",
+      "state" : {
+        "revision" : "75f12587ccf3296827d3f97e2a69a5865acc4d98",
+        "version" : "2.9.4"
+      }
+    },
+    {
+      "identity" : "telegraph",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Building42/Telegraph.git",
+      "state" : {
+        "revision" : "e763612868ffd0b1be190b2ff40276e4ab883e18",
+        "version" : "0.29.0"
+      }
+    }
+  ],
+  "version" : 2
+}

@@ -15,8 +15,11 @@
 		3916A8F1284B51780053196E /* IsOnUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8F0284B51780053196E /* IsOnUITests.swift */; };
 		3916A8F3284B51780053196E /* IsOnUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8F2284B51780053196E /* IsOnUITestsLaunchTests.swift */; };
 		3916A900284B520E0053196E /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8FF284B520E0053196E /* Home.swift */; };
+		C258CC5828511CA80037A21A /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = C258CC5728511CA80037A21A /* Telegraph */; };
+		C258CC5A285121920037A21A /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C258CC59285121920037A21A /* WebServer.swift */; };
 		C2E9063B2850D8AF003CDB10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9063A2850D8AF003CDB10 /* AppDelegate.swift */; };
 		C2E9063D2850DB38003CDB10 /* IsCameraOn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9063C2850DB38003CDB10 /* IsCameraOn.swift */; };
+		C2E906402850FAE8003CDB10 /* Embassy in Frameworks */ = {isa = PBXBuildFile; productRef = C2E9063F2850FAE8003CDB10 /* Embassy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +53,7 @@
 		3916A8F2284B51780053196E /* IsOnUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsOnUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3916A8FF284B520E0053196E /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		3916A903284B5B840053196E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C258CC59285121920037A21A /* WebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
 		C2E9063A2850D8AF003CDB10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2E9063C2850DB38003CDB10 /* IsCameraOn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsCameraOn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,6 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2E906402850FAE8003CDB10 /* Embassy in Frameworks */,
+				C258CC5828511CA80037A21A /* Telegraph in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +117,7 @@
 				3916A8D8284B51780053196E /* Assets.xcassets */,
 				3916A8DD284B51780053196E /* IsOn.entitlements */,
 				3916A8DA284B51780053196E /* Preview Content */,
+				C258CC59285121920037A21A /* WebServer.swift */,
 			);
 			path = IsOn;
 			sourceTree = "<group>";
@@ -156,6 +163,10 @@
 			dependencies = (
 			);
 			name = IsOn;
+			packageProductDependencies = (
+				C2E9063F2850FAE8003CDB10 /* Embassy */,
+				C258CC5728511CA80037A21A /* Telegraph */,
+			);
 			productName = IsOn;
 			productReference = 3916A8D1284B51760053196E /* IsOn.app */;
 			productType = "com.apple.product-type.application";
@@ -228,6 +239,10 @@
 				Base,
 			);
 			mainGroup = 3916A8C8284B51760053196E;
+			packageReferences = (
+				C2E9063E2850FAE8003CDB10 /* XCRemoteSwiftPackageReference "Embassy" */,
+				C258CC5628511CA80037A21A /* XCRemoteSwiftPackageReference "Telegraph" */,
+			);
 			productRefGroup = 3916A8D2284B51760053196E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,6 +290,7 @@
 				3916A900284B520E0053196E /* Home.swift in Sources */,
 				C2E9063D2850DB38003CDB10 /* IsCameraOn.swift in Sources */,
 				3916A8D5284B51760053196E /* IsOnApp.swift in Sources */,
+				C258CC5A285121920037A21A /* WebServer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +610,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C258CC5628511CA80037A21A /* XCRemoteSwiftPackageReference "Telegraph" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Building42/Telegraph.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.1;
+			};
+		};
+		C2E9063E2850FAE8003CDB10 /* XCRemoteSwiftPackageReference "Embassy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/envoy/Embassy.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C258CC5728511CA80037A21A /* Telegraph */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C258CC5628511CA80037A21A /* XCRemoteSwiftPackageReference "Telegraph" */;
+			productName = Telegraph;
+		};
+		C2E9063F2850FAE8003CDB10 /* Embassy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C2E9063E2850FAE8003CDB10 /* XCRemoteSwiftPackageReference "Embassy" */;
+			productName = Embassy;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3916A8C9284B51760053196E /* Project object */;
 }
