@@ -15,6 +15,8 @@
 		3916A8F1284B51780053196E /* IsOnUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8F0284B51780053196E /* IsOnUITests.swift */; };
 		3916A8F3284B51780053196E /* IsOnUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8F2284B51780053196E /* IsOnUITestsLaunchTests.swift */; };
 		3916A900284B520E0053196E /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3916A8FF284B520E0053196E /* Home.swift */; };
+		C2E9063B2850D8AF003CDB10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9063A2850D8AF003CDB10 /* AppDelegate.swift */; };
+		C2E9063D2850DB38003CDB10 /* IsCameraOn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9063C2850DB38003CDB10 /* IsCameraOn.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		3916A8F2284B51780053196E /* IsOnUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsOnUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3916A8FF284B520E0053196E /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		3916A903284B5B840053196E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C2E9063A2850D8AF003CDB10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C2E9063C2850DB38003CDB10 /* IsCameraOn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsCameraOn.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,12 +103,14 @@
 			isa = PBXGroup;
 			children = (
 				3916A903284B5B840053196E /* Info.plist */,
+				C2E9063A2850D8AF003CDB10 /* AppDelegate.swift */,
 				3916A8D4284B51760053196E /* IsOnApp.swift */,
+				C2E9063C2850DB38003CDB10 /* IsCameraOn.swift */,
+				3916A8FF284B520E0053196E /* Home.swift */,
 				3916A8D6284B51760053196E /* ContentView.swift */,
 				3916A8D8284B51780053196E /* Assets.xcassets */,
 				3916A8DD284B51780053196E /* IsOn.entitlements */,
 				3916A8DA284B51780053196E /* Preview Content */,
-				3916A8FF284B520E0053196E /* Home.swift */,
 			);
 			path = IsOn;
 			sourceTree = "<group>";
@@ -264,8 +270,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2E9063B2850D8AF003CDB10 /* AppDelegate.swift in Sources */,
 				3916A8D7284B51760053196E /* ContentView.swift in Sources */,
 				3916A900284B520E0053196E /* Home.swift in Sources */,
+				C2E9063D2850DB38003CDB10 /* IsCameraOn.swift in Sources */,
 				3916A8D5284B51760053196E /* IsOnApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,6 +444,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.spoolspace.IsOn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -464,6 +473,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.spoolspace.IsOn;
 				PRODUCT_NAME = "$(TARGET_NAME)";

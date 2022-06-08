@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Home: View {
-    @EnvironmentObject var appDelegate: AppDelegate
+    
+    @EnvironmentObject var data: AppDelegate
+    
+    @State var secondsElapsed = 0
+    @State var timer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
+    @State var connectedTimer: Cancellable? = nil
     
     @State var currentTab: String = "IsOn"
     @Namespace var animation
@@ -21,9 +27,19 @@ struct Home: View {
             
             if currentTab == "IsOn" {
                 
-                HStack {
-                    Text("IsOn")
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 10){
+                        
+                        VStack(spacing: 8){
+                            CardView(text: "Is Camera On:", symbol: "camera.on.rectangle.fill", isOn: data.isCameraOn)
+                            CardView(text: "Is Micro On:", symbol: "waveform.and.mic", isOn: false)
+                            
+                            //Divider()
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical,8)
 
+                    }
                 }
                 
                     
@@ -36,28 +52,13 @@ struct Home: View {
             }
         
             
-//            ScrollView(.vertical, showsIndicators: false) {
-//                VStack(spacing: 10){
-//                    if let coins = appModel.coins{
-//                        ForEach(coins){coin in
-//                            VStack(spacing: 8){
-//                                CardView(coin: coin)
-//                                Divider()
-//                            }
-//                            .padding(.horizontal)
-//                            .padding(.vertical,8)
-//                        }
-//                    }
-//                }
-//            }
+            
             Spacer()
             HStack{
                 Button {
                     
-                    appDelegate.changeIcon()
-                
-                    
-                    
+                    //data.changeIcon()
+ 
                 } label: {
                     Image(systemName: "gearshape.fill")
                 }
@@ -80,10 +81,45 @@ struct Home: View {
         .buttonStyle(.plain)
     }
     
+    @ViewBuilder
+    func CardView(text: String, symbol: String, isOn: Bool)->some View {
+        
+        HStack(spacing: 0) {
+            
+                Text(text)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(6)
+                    
+            Image(systemName: "camera.on.rectangle.fill")
+                .foregroundColor(isOn ? .red : .gray)
+                .imageScale(.large)
+                .padding(6)
+            
+            
+        }
+        .padding(10)
+        .background{
+            Color.gray.opacity(0.5)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        }
+//        .background(content: {
+//            RoundedRectangle(cornerRadius: 8, style: .continuous)
+//                .fill(Color.gray.opacity(0.5))
+//                .matchedGeometryEffect(id: "Tab", in: animation)
+//        })
+//        .contentShape(Rectangle())
+        
+        
+    }
+   
+    
+    
     // MARK: Custom Segmented Control
     @ViewBuilder
     func CustomSegmentedControl()->some View{
-        HStack(spacing: 0){
+        HStack(spacing: 0) {
             ForEach(["IsOn","About"],id: \.self){tab in
                 Text(tab)
                     .fontWeight(currentTab == tab ? .semibold : .regular)
@@ -112,6 +148,7 @@ struct Home: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         }
     }
+    
 }
 
 struct Home_Previews: PreviewProvider {
