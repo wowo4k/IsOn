@@ -13,23 +13,40 @@ struct ContentView: View {
     @EnvironmentObject var data: AppDelegate
     
     @State var secondsElapsed = 0
-    @State var timer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
+    @State var runCounter = 0
+    @State var timer: Timer.TimerPublisher = Timer.publish(every: 1, on: .main, in: .common)
     @State var connectedTimer: Cancellable? = nil
    
     var body: some View {
         VStack () {
             Text("IsOn!!")
         }.onAppear {
-            //self.instantiateTimer()
+            self.instantiateTimer()
+            
+            
+            
         }.onDisappear {
             self.cancelTimer()
         }.onReceive(timer) { _ in
             
-            
-            print("Timer Event!!")
+            //print("Timer Event!!")
             self.secondsElapsed += 1
-            data.isCameraon()
+            self.runCounter += 1
             
+            if self.runCounter >= 30 {
+                
+                print("ForceWrite \(runCounter)")
+                if data.isCameraon(forceWrite: true) {
+                    self.runCounter = 0
+                }
+                
+            }
+            else {
+                print("Non ForceWrite \(runCounter)")
+                if data.isCameraon(forceWrite: false) {
+                    self.runCounter = 0
+                }
+            }
         }
     }
     

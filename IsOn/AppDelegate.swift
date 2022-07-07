@@ -8,9 +8,8 @@
 import Foundation
 import SwiftUI
 
-import Foundation
-import Embassy
-import Telegraph
+import InfluxDBSwift
+import InfluxDBSwiftApis
 
 // MARK: Setting Up Menu Bar Icon and Menu Bar Popover area
 class AppDelegate: NSObject,ObservableObject, NSApplicationDelegate {
@@ -19,20 +18,42 @@ class AppDelegate: NSObject,ObservableObject, NSApplicationDelegate {
     
     @Published var isCameraOn: Bool = false
     
+    
+    @Published var deviceName: String = "unkown"
+    
+    var isCameraOnPrev: Bool = false
+    
+    
     // MARK: Properties
     @Published var statusItem: NSStatusItem?
     @Published var popover = NSPopover()
+    
+    
+    // INfluxDB Cloud Parameter
+    var url = "https://eu-central-1-1.aws.cloud2.influxdata.com"
+    var token = "UBW3UeRCmnt0-0cJBdDHEtND3AE8a34xxnhp8Jj5G_2N8FljRb_5BCQVsEaY_6AUu0jIqmCzrD1fatTZ4aGAww=="
+    var bucket = "unkown"
+    var org = "mrjerz@pm.me"
+    var orgID = "ee725db6ff88f614"
+    
+    let retention: Int64 = 3600*24*30
     
     //var isOn: Bool = false
     let queue = DispatchQueue(label: "com.envoy.embassy-tests.http-server", attributes: [])
     //var loop: SelectorEventLoop!
     var session: URLSession!
     
-    var demo: TelegraphDemo!
-    
     func applicationDidFinishLaunching(_ notification: Notification) {
+        
         setUpMacMenu()
-        initServer()
+        
+        if let deviceName = Host.current().localizedName {
+            self.deviceName = deviceName
+            self.bucket = "ison"
+        }
+        
+        checkCreateBucket()
+        
     }
     
     func setUpMacMenu(){
@@ -71,14 +92,15 @@ class AppDelegate: NSObject,ObservableObject, NSApplicationDelegate {
     
     @objc func changeIcon () {
         
-        //isOn.toggle()
-        
         if let menuButton = statusItem?.button{
+            
+            
+//            if let image = NSImage(named: "Image") {
             
             
             if let image = NSImage(systemSymbolName: isCameraOn ? "camera.on.rectangle.fill" : "camera.on.rectangle.fill",
                                    accessibilityDescription: "A multiply symbol inside a filled circle.") {
-                    
+
                 var config1 = NSImage.SymbolConfiguration(textStyle: .body,scale: .large)
                 config1 = config1.applying(.init(paletteColors: [.systemGray, .systemGray]))
                 
@@ -86,51 +108,152 @@ class AppDelegate: NSObject,ObservableObject, NSApplicationDelegate {
                 config2 = config2.applying(.init(paletteColors: [.systemRed, .systemRed]))
                 
                 menuButton.image = image.withSymbolConfiguration(isCameraOn ? config2 : config1)
-                
             }
 
             menuButton.action = #selector(menuButtonAction(sender:))
         }
-        
     }
     
     
-    func isCameraon() {
+    func isCameraon(forceWrite: Bool) -> Bool {
         
         isCameraOn = IsOn.isCameraOn()
-        changeIcon ()
+        if isCameraOn != isCameraOnPrev {
+            
+            print (" Camera change detected: \(isCameraOn)" )
+            
+            changeIcon ()
+            writeInfluxDB()
+            isCameraOnPrev = isCameraOn
+            
+            return true
+            
+        }
+        else {
+            
+            if forceWrite {
+                writeInfluxDB()
+                return true
+            }
+            
+        }
         
-        print (" Camera is: \(isCameraOn)" )
+        return false
+        
     }
- 
-    func initServer() {
+    
+    func checkCreateBucket() {
         
-//        demo = TelegraphDemo()
-//        demo.start()
-        
-        let loop = try! SelectorEventLoop(selector: try! SelectSelector())
-        let server = DefaultHTTPServer(eventLoop: loop, port: 9080) {
-            (
-                environ: [String: Any],
-                startResponse: ((String, [(String, String)]) -> Void),
-                sendBody: ((Data) -> Void)
-            ) in
-            // Start HTTP response
-            startResponse("200 OK", [])
-            let pathInfo = environ["PATH_INFO"]! as! String
-            sendBody(Data("the path you're visiting is \(pathInfo.debugDescription)".utf8))
-            // send EOF
-            sendBody(Data())
+        // Initialize Client and API
+        let client = InfluxDBClient(url: url, token: token)
+        let api = InfluxDB2API(client: client)
+
+        // Bucket configuration
+        let request = PostBucketRequest(orgID: self.orgID
+                                        , name: self.bucket, description: "Monitoring bucket for IsCamerOn", rp: "keine Ahnung", retentionRules: [RetentionRule(type: RetentionRule.ModelType.expire, everySeconds: self.retention)], schemaType: .implicit)
+
+        // Create Bucket
+        api.bucketsAPI.postBuckets(postBucketRequest: request) { bucket, error in
+            // For error exit
+            if let error = error {
+                print(error.description)
+                self.atExit(client: client, error: error)
+            }
+
+            if let bucket = bucket {
+                // Create Authorization with permission to read/write created bucket
+                let bucketResource = Resource(
+                        type: Resource.ModelType.buckets,
+                        id: bucket.id!,
+                        orgID: self.orgID
+                )
+                
+                
+//                // Authorization configuration
+//                let request = AuthorizationPostRequest(
+//                        description: "Authorization to read/write bucket: \(self.bucket)",
+//                        orgID: self.org,
+//                        permissions: [
+//                            Permission(action: Permission.Action.read, resource: bucketResource),
+//                            Permission(action: Permission.Action.write, resource: bucketResource)
+//                        ])
+//
+//                // Create Authorization
+//                api.authorizationsAPI.postAuthorizations(authorizationPostRequest: request) { authorization, error in
+//                    // For error exit
+//                    if let error = error {
+//                        self.atExit(client: client, error: error)
+//                    }
+//
+//                    // Print token
+//                    if let authorization = authorization {
+//                        let token = authorization.token!
+//                        print("The bucket: '\(bucket.name)' is successfully created.")
+//                        print("The following token could be use to read/write:")
+//                        print("\t\(token)")
+//                        self.atExit(client: client)
+//                    }
+//                }
+            }
         }
 
-        // Start HTTP server to listen on the port
-        try! server.start()
-
-        print("Server running at localhost:8080")
-
-        // Run event loop
-        loop.runForever()
         
+        
+    }
+ 
+    func writeInfluxDB() {
+        
+        // Initialize Client with default Bucket and Organization
+        let client = InfluxDBClient(
+                url: url,
+                token: token,
+                options: InfluxDBClient.InfluxDBOptions(bucket: self.bucket, org: self.org))
+    
+        //
+        // Record defined as Data Point
+        //
+        let recordPoint = InfluxDBClient
+                .Point("ison")
+                .addTag(key: "machine", value: self.deviceName)
+                //.addField(key: "value", value: .int(2))
+                .addField(key: "isCameraOn", value: .boolean(self.isCameraOn) )
+                .addField(key: "camera_on", value: .int(self.isCameraOn ? 1 : 0) )
+        
+                .addField(key: "isMicrophoneOn", value: .boolean(self.isCameraOn) )
+                .addField(key: "microphone_on", value: .int(self.isCameraOn ? 1 : 0) )
+        
+        
+        
+        
+        
+        client.makeWriteAPI().write(points: [recordPoint]) { result, error in
+            // For handle error
+            if let error = error {
+                self.atExit(client: client, error: error)
+            }
+
+            // For Success write
+            if result != nil {
+                print("Written data:\n\n\([recordPoint].map { "\t- \($0)" }.joined(separator: "\n"))")
+                print("\nSuccess!")
+            }
+
+            self.atExit(client: client)
+        }
+
+    }
+
+    private func atExit(client: InfluxDBClient, error: InfluxDBClient.InfluxDBError? = nil) {
+        // Dispose the Client
+        client.close()
+    }
+    
+    
+    
+    //Preference Mgmt
+    func savePreferences() {
+        
+        print("savePreferences")
     }
 }
 
